@@ -59,12 +59,12 @@ public class Player : MonoBehaviour
     {
         //foreach (var c in hand) if(c!=null) c.gameObject.SetActive(true);
         //handData.Clear();
-        float spacing = 1.8f;
+        float spacing = 3f;
         Debug.Log("Total card in hand "+handData.Count);
         for (int i = 0; i < handData.Count; i++)
         {
             var prefab = handData[i];
-            var pos = new Vector2(transform.position.x + PosValueX + (i * spacing), transform.position.y - 2.8f);
+            var pos = new Vector2(transform.position.x + PosValueX + (i * spacing), transform.position.y - 5f);
             var go = Instantiate(prefab, pos, Quaternion.identity);
             var cardCom= go.GetComponent<Card>();
             if (cardCom != null)

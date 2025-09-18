@@ -15,7 +15,7 @@ public class CallRound : MonoBehaviour
         for (int i = 0; i < callRoundScriptableObjects.callRounds.Count; i++)
         {
             int index = i;
-            callRoundScriptableObjects.callRounds[i].onClick.AddListener(()=>OnButtonClicked(index));
+            callRoundScriptableObjects.callRounds[i].onClick.AddListener(()=>OnButtonClicked(index+2));
         } 
         // _humanPlayer = FindFirstObjectByType<HumanPlayer>();
 
@@ -59,7 +59,7 @@ public class CallRound : MonoBehaviour
     public void DoActionRound(int index)
     {
         if (_humanPlayer == null) _humanPlayer = FindAnyObjectByType<HumanPlayer>();
-        if(_humanPlayer!=null) _humanPlayer.Call= index+1; Debug.Log("human is setted to "+_humanPlayer.Call);
+        if(_humanPlayer!=null) _humanPlayer.Call= index+2; Debug.Log("human is setted to "+_humanPlayer.Call);
         isTheRoundChosen = true;
        
 

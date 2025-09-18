@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI humanTimeRemainingText;
     private bool _waitingForHuman;
     private bool _humanTurn;
-    [SerializeField] TextMeshProUGUI winnerOfGameText,winnerOfRoundText;
+    [SerializeField] TextMeshProUGUI winnerOfGameText,winnerOfRoundText,winnerOfTrickText;
+    private Dictionary<string, int> _roundWins = new Dictionary<string, int>();
     private int _plaThisTrick;
     public bool HumanTurn
     {
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     { 
+        winnerOfTrickText.gameObject.SetActive(false);
         deckManager.ActivatingAllCards();
         SetupGame();
         _currentTurn = 0;
@@ -69,6 +71,8 @@ public class GameManager : MonoBehaviour
             _roundScore[p.PlayerName] = 0; 
             if(!_totalScore.ContainsKey(p.PlayerName))
                 _totalScore[p.PlayerName] = 0;
+            if(!_roundWins.ContainsKey(p.PlayerName))
+                _roundWins[p.PlayerName] = 0;
             
         }
 
@@ -158,6 +162,8 @@ public class GameManager : MonoBehaviour
         //SetupGame();
         while (_tricksPlayedThisRound < 13)
         {
+            // StartCoroutine(WaitForSomeMoment());
+            // winnerOfTrickText.gameObject.SetActive(false);
             _plaThisTrick = 0;
                 _currentTrickPlays.Clear();
                 _humanTurn = false;
@@ -192,7 +198,7 @@ public class GameManager : MonoBehaviour
                     // if (playThisTrick < players.Count)
                     _currentTurn = (_currentTurn+1) % players.Count;
                     _plaThisTrick++;
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(2f);
                     //yield return null;
                 }
                 _humanTurn = false;
@@ -261,10 +267,19 @@ public class GameManager : MonoBehaviour
        // _leadSuit = winner;
         _currentTrickPlays.Clear();
         //winnerOfRoundText.text = $"The Lead Suit is {_leadSuit}";
+        winnerOfTrickText.gameObject.SetActive(true);
+        winnerOfTrickText.text = $"The winner of the trick is {winnerPlayer.PlayerName}";
         _highestValue = -1;
         _leadSuit = Suit.None;
+      
     }
 
+    // private IEnumerator WaitForSomeMoment()
+    // {
+    //     
+    //     yield return new WaitForSeconds(5f);
+    //     winnerOfTrickText.gameObject.SetActive(false);
+    // }
     void EndRound()
     {
         if (_roundScore == null || _roundScore.Count == 0) return;
@@ -276,19 +291,23 @@ public class GameManager : MonoBehaviour
            int roundPoints;
            if (tricksWon >= call)
            {
-               if (call >= 0)
+               if (call >= 8)
                {
-                   roundPoints = 16;
+                   roundPoints = 13;
                }
                else
                {
-                   roundPoints = call * 2;
-                   int extraTricks = tricksWon - call;
-                   if (extraTricks > 0)
-                   {
-                       roundPoints += (int)(extraTricks*0.1);
-                   }
+                   roundPoints = call;
                }
+               // else
+               // {
+               //     roundPoints = call * 2;
+               //     int extraTricks = tricksWon - call;
+               //     if (extraTricks > 0)
+               //     {
+               //         roundPoints += (int)(extraTricks*0.1);
+               //     }
+               // }
            }
            else
            {
@@ -307,12 +326,29 @@ public class GameManager : MonoBehaviour
             winnerOfRoundText.gameObject.SetActive(true);
             winnerOfRoundText.text = $"The round Winner is {rounWinner.Key} {rounWinner.Value} wins";
         }
+        if(_roundWinnerPlayer != null) 
+            _roundWins[_roundWinnerPlayer.PlayerName]++;
+        if (winnerOfRoundText != null)
+        {
+            winnerOfRoundText.gameObject.SetActive(true);
+            string result = $"Round {_roundNumber} Winner: {rounWinner.Key} {rounWinner.Value}  tricks)\n\n";
+            result += "Scores so far:\n";
+            foreach (var p in players)
+            {
+                int totalPoints = _totalScore.ContainsKey(p.PlayerName) ? _totalScore[p.PlayerName] : 0;
+                int roundsWon = _roundWins.ContainsKey(p.PlayerName) ? _roundWins[p.PlayerName] : 0;
+                result += $"{p.PlayerName}: {totalPoints} pts| {roundsWon}/{_totalRounds} rounds\n";
+            }
+            winnerOfTrickText.text = result;
+        }
         //ChoosingTrickWinner();
         _roundScore.Clear();
         _currentTrickPlays.Clear();
         _leadSuit = Suit.None;
         _highestValue = -1;
         _tricksPlayedThisRound = 0;
+        
+        //StartCoroutine(WaitForSomeMoment());
     }
 
     void EndGame()

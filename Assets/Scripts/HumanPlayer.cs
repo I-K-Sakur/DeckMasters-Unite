@@ -1,8 +1,10 @@
 
+using TMPro;
 using UnityEngine;
 
 public class HumanPlayer : Player
 {
+    [SerializeField] TextMeshProUGUI _updateText;
     [SerializeField]private GameManager gameManager;
 
     protected  void Awake()

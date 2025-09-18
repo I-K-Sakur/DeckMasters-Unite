@@ -7,11 +7,13 @@ public class AiPlayer : Player
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private TextMeshProUGUI[] aiTextPrefab;
-    private Vector2 startpos;
+    private Card _cardClone;
+   // private Vector2 startpos;
     //private int callRound;
     protected  void Awake()
     {
-         startpos = Vector2.zero;
+        
+         //startpos = Vector2.zero;
         if (gameManager == null)
         {
             gameManager = FindFirstObjectByType<GameManager>();
@@ -27,16 +29,8 @@ public class AiPlayer : Player
 
     public override Card PlayerToChoseCard(string name, Suit leadSuit, int highestScore)
     {
-        Debug.Log($"AI {playerName} has {handData.Count} cards at Start()");
-        // if (handData == null || handData.Count == 0)
-        // {
-        //     Debug.Log("ai er hate card sesh");
-        //     return null;
-        //    
-        // }
         
-        // if (leadSuit != Suit.None)
-        // {
+        Debug.Log($"AI {playerName} has {handData.Count} cards at Start()");
         
             var sameSuit = handData.Where(card => card.type == leadSuit).ToList();
             Card chosenCard = null;
@@ -59,7 +53,7 @@ public class AiPlayer : Player
         //RemoveCardFromHand(chosenCard);
         if (chosenCard != null)
         {
-            Debug.Log($"{playerName} chose {chosenCard.rank} of {chosenCard.type}");
+            Debug.Log($" {playerName} chose {chosenCard.rank} of {chosenCard.type}");
             handData.Remove(chosenCard);
             RemoveCardFromHand(chosenCard);
            AiCreateVisualCharacter(chosenCard);
@@ -73,19 +67,43 @@ public class AiPlayer : Player
     {
         handData.Remove(card);
     }
+
+    private Vector2 Position(int playerNumber)
+    {
+        Vector2 pos = Vector2.zero;
+        switch (playerNumber)
+        {
+            case 1:
+                 pos = new Vector2(transform.position.x-5f, transform.position.y);
+                break;
+            case 2:
+                 pos = new Vector2(transform.position.x, transform.position.y-5f);
+                break;
+            case 3:
+                 pos = new Vector2(transform.position.x+5f, transform.position.y+5f);
+                break; 
+        }
+
+        return pos;
+    }
     protected override void CreateVisualHand()
     {
         return;
     }
-    public  void AiCreateVisualCharacter(Card card)
+    public  void AiCreateVisualCharacter(Card cardPref)
     {
+        if(_cardClone!=null)
+            Destroy(_cardClone.gameObject);
+        if (cardPref == null) return;
+        Vector3 spawnPosition = Position(playerNumber);
        // foreach (var c in hand) if(c!=null) c.gameObject.SetActive(true);
-    
+       _cardClone= Instantiate(cardPref,spawnPosition,Quaternion.identity);
+       //newCard.transform.localScale = Vector3.one;
         if (aiTextPrefab == null || aiTextPrefab.Length == 0) return;
         int aiIndex = playerNumber - 1;
         if (aiIndex < 0 || aiIndex >= aiTextPrefab.Length) return;
         var newText = aiTextPrefab[aiIndex];
-        newText.text = $"{playerName} has played {card.rank} of {card.type}";
-       // Debug.Log($"{playerName} has played {card.rank} of {card.type}");
+        newText.text = $"{playerName} Score: {score} + {PlayerName} has played {cardPref.rank} of {cardPref.type}";
+        // Debug.Log($"{playerName} has played {card.rank} of {card.type}");
     }
 }
