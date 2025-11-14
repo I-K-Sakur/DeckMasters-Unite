@@ -11,14 +11,14 @@ public class MenuSceneScript : MonoBehaviour
 
     public void SettingsMenu()
     {
-        Debug.Log("Setting Working");
-        Debug.Log("Setting Working");
+        //Debug.Log("Setting Working");
+        //Debug.Log("Setting Working");
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+2);
     }
 
     public void ExitGame()
     {
-        Debug.Log("Exiting the Game");
+        //Debug.Log("Exiting the Game");
         Application.Quit();
     }
 }

@@ -71,7 +71,7 @@ public class DeckManager : ScriptableObject
             Debug.Log($"Player {i + 1} has {Players[i].Count} cards.");
         }
 
-        Debug.Log(Players.Count+"the deck is created");
+        //Debug.Log(Players.Count+"the deck is created");
     }
 
 }
