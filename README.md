@@ -1,4 +1,13 @@
-# Call-Break-Card-Game-2D
+# Deckmaster-Unite Game
+Deckmaster-Unite
+DeckMasters Unite is my own card-based game combining classic playing cards with UNO-style action mechanics. In this gameplay video, I showcase how the game works, its UI, and the fast-paced strategy behind every move. Enjoy this quick look at one of my latest indie game projects!
+There are three types of Game:
+-Bridge Game
+-Uno Card Game
+-Pokemon Card Game
+This video only covers the Call Bridge card game.
+
+### Call-Break-Card-Game-2D
 Call Bridge
 
 Call Bridge (also known as Call Break) is a classic trick-taking card game played with a standard 52-card deck. It is usually played by 4 players, where each player competes individually. The main objective of the game is to win as many tricks as possible based on the number of tricks (calls) a player bids at the beginning of each round.
@@ -35,4 +44,4 @@ Player turn management.
 
 Extendable structure for adding multiplayer or AI opponents.
 
-Full GamePlay Video: https://youtu.be/pGrcQrNop54
+Full GamePlay Video: https://www.youtube.com/watch?v=LcyoC300Xg4
